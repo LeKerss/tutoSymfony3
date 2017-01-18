@@ -1,38 +1,94 @@
 <?php
 
-
 namespace OC\PlatformBundle\Controller;
-
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AdvertController extends Controller{
+class AdvertController extends Controller {
 
-    public function viewSlugAction($slug, $year, $_format) {
-        return new Response(
-            "L'annonce correspondant au slug '".$slug."', créée en ".$year." et au format ".$_format."."
-        );
-    }
+    /**
+     * Index page : Advert list
+     */
+    public function indexAction($page) {
+        if(page < 1) {
+            // TODO edit custom 404 page
+            throw new NotFoundHttpException('Page n°"'.$page.'" inexistante.');
+        }
 
-    public function viewAction($id, Request $request) {
-        //Generating redirection url
-        return $this->redirectToRoute('oc_platform_home');
-/*        //Get 'tag' parameter from the request
-        $tag = $request->query->get('tag');
+        // TODO fetch adverts
+
+        return this->render('OCPlatformBundle:Advert:index.html.twig');
+	}
+
+    /**
+     *
+     * Display advert based on id
+     */
+    public function viewAction($id) {
+
+        //TODO fetch advert at id $id
 
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-            'id'=>$id,
-            'tag'=>$tag
-        ));*/
+            'id' => $id
+        ));
     }
 
-	public function indexAction()	{
-		$content = $this
-		->get('templating')
-		->render('OCPlatformBundle:Advert:index.html.twig', array('nom' => 'Kersa'));
-		return new response($content);
-	}
+    /**
+     * Add new advert
+     */
+    public function addAction(Request $request) {
+
+        //TODO display form template
+
+        if($request->isMethod('POST')) {
+            // TODO add advert and get new advert id
+            $newId = 1;
+
+            //TODO update view
+
+            $request
+                ->getSession()
+                ->getFlashBag()
+                ->add('notice', 'Annonce bien enregistrée');
+
+            return $this->redirectToRoute('OCPlatformBundle:Advert:view.html.twig', array(
+                'id' => $newId
+            ));
+        }
+    }
+
+	/**
+     * Edit advert at id = $id
+     */
+	public function editAction($id, Request $request) {
+	    if($request->isMethod('POST')) {
+	        $request
+                ->getSession()
+                ->getFlashBag()
+                ->add('notice', 'Modifications enregistrées.');
+	        return $this->redirectToRoute('oc_platform_view', array(
+	            'id' => $request
+                    ->query
+                    ->get('id')
+            ));
+        }
+        return $this->render('OCPlatformBundle:Advert:edit.html.twig', array(
+            'id' => $id
+        ));
+    }
+
+    /**
+     * Delete advert at id = $id
+     */
+    public function deleteAction($id) {
+        // TODO get advert with id = $id
+
+        // TODO manage advert deletion
+
+        return $this->render('OCPlatformBundle:Advert:delete.html.twig');
+    }
 
 }
