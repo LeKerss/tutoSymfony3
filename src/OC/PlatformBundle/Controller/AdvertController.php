@@ -86,7 +86,7 @@ class AdvertController extends Controller {
      * Delete advert at id = $id
      */
     public function deleteAction($id) {
-        // TODO get advert with id = $id;
+        // TODO get advert with id = $id
 
         // TODO manage advert deletion
 
