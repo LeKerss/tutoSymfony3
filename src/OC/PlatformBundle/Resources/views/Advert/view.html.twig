@@ -4,10 +4,16 @@
         <title>Affichage de l'annonce {{ id }}</title>
     </head>
     <body>
-        <h1>Hello Annonce n°{{ id}}</h1>
-        <p>
-            Tag éventuel : {{ tag }}
-        </p>
+        <h1>Annonce n°{{ id}}</h1>
+        <div>
+            {% for message in app.session.flashbag.get('info') %}
+                <p>Message flash : {{ message }}</p>
+            {% endfor %}
+        </div>
+    <p>
+        Ici nous pourrons lire l'annonce ayant comme id : {{ id }}<br/>
+        Mais bla lba bla
+    </p>
     </body>
 
 </html>
