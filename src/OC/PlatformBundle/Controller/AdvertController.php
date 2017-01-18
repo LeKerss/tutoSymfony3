@@ -93,4 +93,20 @@ class AdvertController extends Controller {
         return $this->render('OCPlatformBundle:Advert:delete.html.twig');
     }
 
+    /**
+     * Display advert menu
+     */
+    public function menuAction() {
+        //TODO fetch advert list from database
+        $listAdverts = array(
+            array('id' => 2, 'title' => 'Recherche développeur Symfony'),
+            array('id' => 5, 'title' => 'Mission Webmaster'),
+            array('id' => 4, 'title' => 'Offre de stage')
+        );
+
+        return $this->render('OCPlatformBundle:Advert:menu.html.twig', array(
+            'listAdverts' => $listAdverts
+        ));
+    }
+
 }
