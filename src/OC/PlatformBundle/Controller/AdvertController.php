@@ -4,7 +4,7 @@ namespace OC\PlatformBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
+//use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AdvertController extends Controller {
@@ -13,14 +13,14 @@ class AdvertController extends Controller {
      * Index page : Advert list
      */
     public function indexAction($page) {
-        if(page < 1) {
+        if($page < 1) {
             // TODO edit custom 404 page
             throw new NotFoundHttpException('Page n°"'.$page.'" inexistante.');
         }
 
         // TODO fetch adverts
 
-        return this->render('OCPlatformBundle:Advert:index.html.twig');
+        return $this->render('OCPlatformBundle:Advert:index.html.twig');
 	}
 
     /**
@@ -58,6 +58,8 @@ class AdvertController extends Controller {
                 'id' => $newId
             ));
         }
+
+        return $this.render('OCPlatformBundle:Advert:add.html.twig');
     }
 
 	/**
@@ -84,7 +86,7 @@ class AdvertController extends Controller {
      * Delete advert at id = $id
      */
     public function deleteAction($id) {
-        // TODO get advert with id = $id
+        // TODO get advert with id = $id;
 
         // TODO manage advert deletion
 
