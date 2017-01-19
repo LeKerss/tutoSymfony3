@@ -13,17 +13,18 @@
 
 <body>
     <div class="container">
-        <h1>Ma plateforme d'annonces</h1>
-        <p>
-            Projet propulsé par symfony,
-            construit par A.SAKER grace au MOOC OpenClassrooms et Sensiolabs
-        </p>
-        <p>
-            <a class="btn btn-primary btn-lg" href="https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony">
-                Participer au MOOC
-            </a>
-        </p>
-
+        <div id="header" class="jumbotron">
+            <h1>Ma plateforme d'annonces</h1>
+            <p>
+                Projet propulsé par symfony,
+                construit par A.SAKER grace au MOOC OpenClassrooms et Sensiolabs
+            </p>
+            <p>
+                <a class="btn btn-primary btn-lg" href="https://openclassrooms.com/courses/developpez-votre-site-web-avec-le-framework-symfony">
+                    Participer au MOOC
+                </a>
+            </p>
+        </div>
 
         <div class="row">
             <div id="menu" class="col-md-3">
@@ -49,10 +50,10 @@
         </footer>
     </div>
 
-{% block javascripts %}
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-{% endblock %}
+    {% block javascripts %}
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    {% endblock %}
 
 </body>
 </html>

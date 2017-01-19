@@ -1,14 +1,8 @@
-oc_platform_homepage:
-    path:     /
-    defaults:
-        _controller: OCPlatformBundle:Default:index
-
-
 oc_platform_home:
-    path:     /{page}
+    path:      /{page}
     defaults:
-        _controller:  OCPlatformBundle:Advert:index
-        page:         1
+        _controller: OCPlatformBundle:Advert:index
+        page: 1
     requirements:
         page: \d*
 
@@ -37,13 +31,3 @@ oc_platform_delete:
         _controller: OCPlatformBundle:Advert:delete
     requirements:
         id: \d+
-
-oc_platform_view_slug:
-    path:     /{year}/{slug}.{_format}
-    defaults:
-        _controller:  OCPlatformBundle:Advert:viewSlug
-        format:       html
-    requirements:
-        year:   \d{4}
-        format: html|xml
-
