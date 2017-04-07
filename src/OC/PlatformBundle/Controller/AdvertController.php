@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use OC\PlatformBundle\Entity\Advert;
 
 class AdvertController extends Controller {
 
@@ -74,25 +75,36 @@ class AdvertController extends Controller {
      */
     public function addAction(Request $request) {
 
-        //TODO display form template
+    //TODO display form template
+    //
+        //Creating advert object
+        $advert = new Advert();
+        $advert->setTitle('Recherche développeur Symfony.');
+        $advert->setAuthor("Jean-Louis");
+        $advert->setContent("Nous recherchons un développeur Symfony débutant sur Paname. bla bla..");
 
+        // Getting entity manager
+        $em = $this->getDoctrine()->getManager();
+
+        // persisting our advert object
+        $em->persist($advert);
+
+        // Flushing what we have persisted earlier
+        $em->flush();
+
+        // Resuming as previous version
         if($request->isMethod('POST')) {
-            // TODO add advert and get new advert id
-            $newId = 1;
-
-            //TODO update view
-
             $request
                 ->getSession()
                 ->getFlashBag()
                 ->add('notice', 'Annonce bien enregistrée');
 
-            return $this->redirectToRoute('OCPlatformBundle:Advert:view.html.twig', array(
-                'id' => $newId
+            return $this->redirectToRoute('oc_platform_view', array(
+                'id' => $advert.getId()
             ));
         }
 
-        return $this.render('OCPlatformBundle:Advert:add.html.twig');
+        return $this->render('OCPlatformBundle:Advert:add.html.twig', array('advert' => $advert));
     }
 
 	/**
