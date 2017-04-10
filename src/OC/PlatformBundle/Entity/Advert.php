@@ -56,6 +56,15 @@ class Advert
      */
     private $published = true;
 
+
+    /**
+     * @ORM\OneToOne(targetEntity="OC\PlatformBundle\Entity\Image", cascade={"persist"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $image;
+
+
+
     public function __construct() 
     {
         //Default date is now
@@ -190,5 +199,29 @@ class Advert
     public function getPublished()
     {
         return $this->published;
+    }
+
+    /**
+     * Set image
+     *
+     * @param \OC\PlatformBundle\Entity\Image $image
+     *
+     * @return Advert
+     */
+    public function setImage(\OC\PlatformBundle\Entity\Image $image)
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * Get image
+     *
+     * @return \OC\PlatformBundle\Entity\Image
+     */
+    public function getImage()
+    {
+        return $this->image;
     }
 }

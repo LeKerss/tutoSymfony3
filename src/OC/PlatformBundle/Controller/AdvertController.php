@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use OC\PlatformBundle\Entity\Advert;
+use OC\PlatformBundle\Entity\Image;
+use OC\PlatformBundle\Entity\Application;
 
 class AdvertController extends Controller {
 
@@ -56,17 +58,30 @@ class AdvertController extends Controller {
      */
     public function viewAction($id) {
 
-        //TODO fetch advert at id $id
-        $advert = array(
-            'title'     => 'Recherche développeur Symfony2',
-            'id'        => $id,
-            'author'    => 'Alexandre',
-            'content'   => 'Nous recherchons un développeur Symfony2 débutant sur Lyon. Blabla...',
-            'date'      => new \DateTime()
-        );
+        //Get doctrine entity manager
+        $em = $this->getDoctrine()->getManager();
+
+        //Get repository from doctrine manager
+        $repository = $em
+            ->getRepository('OCPlatformBundle:Advert')
+            ;
+
+        //Fetch advert at id $id
+        $advert = $repository->find($id);
+
+        //If advert at id $id is not found
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce que vous recherchez (".$id.") n'existe pas.");
+        }
+
+        //Fetch applications for this advert
+        $listApplications = $em
+            ->getRepository('OCPlatformBundle:Application')
+            ->findBy(array('advert' => $advert));
 
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
-            'advert'    => $advert
+            'advert'    => $advert,
+            'listApplications' => $listApplications
         ));
     }
 
@@ -82,12 +97,35 @@ class AdvertController extends Controller {
         $advert->setTitle('Recherche développeur Symfony.');
         $advert->setAuthor("Jean-Louis");
         $advert->setContent("Nous recherchons un développeur Symfony débutant sur Paname. bla bla..");
+        
+        $image = new Image();
+        $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
+        $image->setAlt('Job de rêve');
+
+        $advert->setImage($image);
+
+        //Creating an application
+        $app1 = new Application();
+        $app1->setAuthor('Hamid');
+        $app1->setContent("J'ai toutes les qualités requises");
+
+        //...And another
+        $app2 = new Application();
+        $app2->setAuthor('Julouis');
+        $app2->setContent("Euh Jamel ?");
+
+        //Binding them to our advert
+        $app1->setAdvert($advert);
+        $app2->setAdvert($advert);
 
         // Getting entity manager
         $em = $this->getDoctrine()->getManager();
 
         // persisting our advert object
         $em->persist($advert);
+
+        $em->persist($app1);
+        $em->persist($app2);
 
         // Flushing what we have persisted earlier
         $em->flush();

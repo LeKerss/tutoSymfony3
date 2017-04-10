@@ -5,13 +5,28 @@
 {% endblock %}
 
 {% block ocplatform_body %}
-    <h2>{{ advert.title }}</h2>
+    <div class="container-fluid">
+    <img class="col-sm-3" src = "{{ advert.image.url }}" alt = "{{ advert.image.alt }}"/>
+    <h2 class="col-sm-9">{{ advert.title }}</h2>
+    </div>
     <i>Par {{ advert.author }}, le {{ advert.date|date('d/m/Y') }}</i>
 
     <div class="well">
         {{ advert.content }}
     </div>
-
+    <div class="well">
+        <h3>Candidatures pour ce poste</h3>
+        {% for application in listApplications %}
+    
+        <div class="panel panel-info">
+            <div class="panel-heading">Candidature émise le {{ application.date|date('d/m/Y') }} par {{ application.author }}</div>
+            <div class="panel-body">{{ application.content }}</div>
+        </div>
+        {% else %}
+            <h4>Pas (encore !) de candidatures</h4>
+        {% endfor %}
+    </div>
+    
     <p>
         <a href="{{ path('oc_platform_home') }}" class="btn btn-default">
             <i class="glyphicon-chevron-left"></i>
@@ -25,9 +40,9 @@
             <i class="glyphicon glyphicon-trash"></i>
             Supprimer l'annonce
         </a>
-        <a href="{{ path('oc_platform_home') }}" class="btn btn-danger">
-            <i class="glyphicon glyphicon-trash"></i>
-            toto accueil
+        <a href="{{ path('oc_platform_home') }}" class="btn btn-primary">
+            <i class="glyphicon glyphicon-home"></i>
+            Revenir à l'accueil
         </a>
     </p>
 {% endblock %}
