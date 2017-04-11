@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use OC\PlatformBundle\Entity\Advert;
 use OC\PlatformBundle\Entity\Image;
 use OC\PlatformBundle\Entity\Application;
+use OC\PlatformBundle\Entity\Skill;
+use OC\PlatformBundle\Entity\AdvertSkill;
 
 class AdvertController extends Controller {
 
@@ -79,9 +81,14 @@ class AdvertController extends Controller {
             ->getRepository('OCPlatformBundle:Application')
             ->findBy(array('advert' => $advert));
 
+        $listAdvertSkills = $em
+            ->getRepository('OCPlatformBundle:AdvertSkill')
+            ->findBy(array('advert' => $advert));
+
         return $this->render('OCPlatformBundle:Advert:view.html.twig', array(
             'advert'    => $advert,
-            'listApplications' => $listApplications
+            'listApplications' => $listApplications,
+            'listAdvertSkills' => $listAdvertSkills
         ));
     }
 
@@ -91,7 +98,11 @@ class AdvertController extends Controller {
     public function addAction(Request $request) {
 
     //TODO display form template
-    //
+
+
+        // Getting entity manager
+        $em = $this->getDoctrine()->getManager();
+
         //Creating advert object
         $advert = new Advert();
         $advert->setTitle('Recherche développeur Symfony.');
@@ -101,6 +112,28 @@ class AdvertController extends Controller {
         $image = new Image();
         $image->setUrl('http://sdz-upload.s3.amazonaws.com/prod/upload/job-de-reve.jpg');
         $image->setAlt('Job de rêve');
+
+            // On récupère toutes les compétences possibles
+        $listSkills = $em->getRepository('OCPlatformBundle:Skill')->findAll();
+
+        // Pour chaque compétence
+        foreach ($listSkills as $skill) {
+            // On crée une nouvelle « relation entre 1 annonce et 1 compétence »
+            $advertSkill = new AdvertSkill();
+
+            // On la lie à l'annonce, qui est ici toujours la même
+            $advertSkill->setAdvert($advert);
+            // On la lie à la compétence, qui change ici dans la boucle foreach
+            $advertSkill->setSkill($skill);
+
+            // Arbitrairement, on dit que chaque compétence est requise au niveau 'Expert'
+            $advertSkill->setLevel('Expert');
+
+            // Et bien sûr, on persiste cette entité de relation, propriétaire des deux autres relations
+            $em->persist($advertSkill);
+        }
+
+
 
         $advert->setImage($image);
 
@@ -118,10 +151,8 @@ class AdvertController extends Controller {
         $app1->setAdvert($advert);
         $app2->setAdvert($advert);
 
-        // Getting entity manager
-        $em = $this->getDoctrine()->getManager();
-
-        // persisting our advert object
+        // Doctrine ne connait pas encore l'entité $advert. Si vous n'avez pas défini la relation AdvertSkill
+        // avec un cascade persist (ce qui est le cas si vous avez utilisé mon code), alors on doit persister $advert
         $em->persist($advert);
 
         $em->persist($app1);
@@ -149,6 +180,24 @@ class AdvertController extends Controller {
      * Edit advert at id = $id
      */
 	public function editAction($id, Request $request) {
+
+        $em = $this->getDoctrine()->getManager();
+
+        //fetch advert at $id
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+        
+        if (null === $advert) {
+          throw new NotFoundHttpException("L'annonce d'id ".$id." n'existe pas.");
+        }
+
+        $listCategories = $em->getRepository('OCPlatformBundle:Category')->findAll();
+
+        foreach($listCategories as $category) {
+            $advert -> addCategory ($category);
+        }
+
+        $em->flush();
+
 	    if($request->isMethod('POST')) {
 	        $request
                 ->getSession()
@@ -172,6 +221,22 @@ class AdvertController extends Controller {
      */
     public function deleteAction($id) {
         // TODO get advert with id = $id
+
+        $em = $this->getDoctrine()->getManager();
+
+
+        $advert = $em->getRepository('OCPlatformBundle:Advert')->find($id);
+
+        //If advert at id $id is not found
+        if (null === $advert) {
+            throw new NotFoundHttpException("L'annonce que vous recherchez (".$id.") n'existe pas.");
+        }
+
+        foreach($advert->getCategories() as $category) {
+            $advert->removeCategory($category);
+        }
+
+        $em->flush();
 
         // TODO manage advert deletion
 

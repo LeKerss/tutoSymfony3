@@ -1,1 +1,4 @@
 [10-Apr-2017 17:17:34 Europe/Paris] PHP Parse error:  syntax error, unexpected 'new' (T_NEW) in C:\Users\Yannis\Documents\DEV\Annas\tutoSymfony3\src\OC\PlatformBundle\Entity\Application.php on line 54
+[11-Apr-2017 13:20:42 Europe/Paris] PHP Parse error:  syntax error, unexpected '/', expecting \\ (T_NS_SEPARATOR) or ';' or '{' in C:\Users\Yannis\Documents\DEV\Annas\tutoSymfony3\src\OC\PlatformBundle\DataFixtures\ORM\LoadCategory.php on line 3
+[11-Apr-2017 13:21:18 Europe/Paris] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in C:\Users\Yannis\Documents\DEV\Annas\tutoSymfony3\src\OC\PlatformBundle\DataFixtures\ORM\LoadCategory.php on line 26
+[11-Apr-2017 13:21:37 Europe/Paris] PHP Parse error:  syntax error, unexpected '=>' (T_DOUBLE_ARROW) in C:\Users\Yannis\Documents\DEV\Annas\tutoSymfony3\src\OC\PlatformBundle\DataFixtures\ORM\LoadCategory.php on line 26
