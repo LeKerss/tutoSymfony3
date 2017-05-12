@@ -1,0 +1,1 @@
+[12-May-2017 11:13:17 Europe/Paris] PHP Fatal error:  Call to undefined function OC\PlatformBundle\Controller\render() in C:\Users\Yannis\Documents\DEV\Annas\tutoSymfony3\src\OC\PlatformBundle\Controller\AdvertController.php on line 95
